@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerador de Links iReal Pro</title>
+    <style>
+      :root {
+        --primary: #2c3e50;
+        --accent: #27ae60;
+        --bg: #f4f7f6;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--bg);
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .container {
+        background: white;
+        width: 100%;
+        max-width: 800px;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: var(--primary);
+        text-align: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+      }
+      .back-button {
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background-color: var(--accent);
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+      .back-button:hover {
+        background-color: #219a52;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .full-width {
+        grid-column: span 2;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: var(--primary);
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 16px;
+        box-sizing: border-box; /* Garante que padding não estoure a largura */
+      }
+      textarea {
+        font-family: "Courier New", Courier, monospace;
+        height: 150px;
+        resize: vertical;
+      }
+      .hint {
+        font-size: 0.85em;
+        color: #7f8c8d;
+        margin-top: 5px;
+      }
+      button.generate-btn {
+        background-color: var(--accent);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        transition: background 0.3s;
+      }
+      button.generate-btn:hover {
+        background-color: #219150;
+      }
+
+      /* Área de Resultados */
+      #resultArea {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px dashed #ddd;
+        display: none; /* Escondido inicialmente */
+      }
+      .result-box {
+        background: #eef2f3;
+        padding: 15px;
+        border-radius: 6px;
+        word-break: break-all;
+        font-family: monospace;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+      }
+      .btn {
+        padding: 10px 20px;
+        border-radius: 4px;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        font-weight: bold;
+        border: none;
+        flex: 1;
+      }
+      .btn-test {
+        background-color: #3498db;
+        color: white;
+      }
+      .btn-copy {
+        background-color: #95a5a6;
+        color: white;
+      }
+      .btn-test:hover {
+        background-color: #2980b9;
+      }
+      .btn-copy:hover {
+        background-color: #7f8c8d;
+      }
+
+      @media (max-width: 600px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .full-width {
+          grid-column: span 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="index.html" class="back-button">← Voltar</a>
+      <h1>Criador de Músicas iReal Pro</h1>
+
+      <form id="songForm">
+        <div class="form-grid">
+          <div class="full-width form-group">
+            <label for="title">Título da Música</label>
+            <input
+              type="text"
+              id="title"
+              placeholder="Ex: Garota de Ipanema"
+              required
+            />
+            <div class="hint">
+              Se começar com "The", o sistema ajustará automaticamente para o
+              final.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="firstName">Nome do Compositor</label>
+            <input
+              type="text"
+              id="firstName"
+              placeholder="Ex: Antonio Carlos"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Sobrenome do Compositor</label>
+            <input type="text" id="lastName" placeholder="Ex: Jobim" required />
+          </div>
+
+          <div class="form-group">
+            <label for="style">Estilo</label>
+            <select id="style">
+              <option value="Medium Swing">Medium Swing</option>
+              <option value="Bossa Nova">Bossa Nova</option>
+              <option value="Ballad">Ballad</option>
+              <option value="Rock">Rock</option>
+              <option value="Funk">Funk</option>
+              <option value="Samba">Samba</option>
+              <option value="Waltz">Waltz</option>
+              <option value="Latin">Latin</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="key">Tom (Armadura)</label>
+            <select id="key">
+              <option value="C">C (Dó Maior)</option>
+              <option value="Db">Db</option>
+              <option value="D">D</option>
+              <option value="Eb">Eb</option>
+              <option value="E">E</option>
+              <option value="F">F</option>
+              <option value="Gb">Gb</option>
+              <option value="G">G</option>
+              <option value="Ab">Ab</option>
+              <option value="A">A</option>
+              <option value="Bb">Bb</option>
+              <option value="B">B</option>
+              <option value="A-">A- (Lá Menor)</option>
+              <option value="Bb-">Bb-</option>
+              <option value="B-">B-</option>
+              <option value="C-">C-</option>
+              <option value="C#-">C#-</option>
+              <option value="D-">D-</option>
+              <option value="Eb-">Eb-</option>
+              <option value="E-">E-</option>
+              <option value="F-">F-</option>
+              <option value="F#-">F#-</option>
+              <option value="G-">G-</option>
+              <option value="G#-">G#-</option>
+            </select>
+          </div>
+
+          <div class="full-width form-group">
+            <label for="progression">Progressão de Acordes</label>
+            <textarea
+              id="progression"
+              placeholder="Ex: *AT44[C |A- |D- |G7 Z"
+              required
+            ></textarea>
+            <div class="hint">
+              Use a notação padrão: | barra, { } repetição, T44 tempo, *A seção.
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="generate-btn">
+          Gerar Código iReal Pro
+        </button>
+      </form>
+
+      <div id="resultArea">
+        <h3>Link Gerado:</h3>
+        <textarea id="urlDisplay" class="result-box" readonly rows="3" style="width: 100%; resize: vertical; font-family: monospace; padding: 10px;"></textarea>
+
+        <div class="action-buttons">
+          <a href="#" id="testLink" class="btn btn-test">Abrir no iReal Pro</a>
+          <button onclick="copyToClipboard()" class="btn btn-copy">
+            Copiar URL
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("songForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          generateIrealLink();
+        });
+
+      function generateIrealLink() {
+        // 1. Coletar dados
+        let title = document.getElementById("title").value.trim();
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const style = document.getElementById("style").value;
+        const key = document.getElementById("key").value;
+        let progression = document.getElementById("progression").value.trim();
+
+        // 2. Lógica de Título: Mover "The" para o final
+        if (title.toLowerCase().startsWith("the ")) {
+          // Remove "The " do começo (4 caracteres) e adiciona ", The" no final
+          title = title.substring(4) + ", The";
+        }
+
+        // 3. Formatar Compositor (Sobrenome Nome)
+        const composer = `${lastName} ${firstName}`;
+
+        // 4. Montar a String Crua (Sem codificação URL ainda)
+        // Formato: Título=Compositor=Estilo=Tom=n=Progressão
+        // O 'n' é um espaço reservado exigido pelo protocolo antigo
+        const rawString = `${title}=${composer}=${style}=${key}=n=${progression}`;
+
+        // 5. Codificar para URL
+        // O iReal Pro exige que tudo após "irealbook://" seja codificado (inclusive os = e espaços)
+        const encodedData = encodeURIComponent(rawString);
+
+        // 6. Montar URL Final
+        const finalUrl = `irealbook://${encodedData}`;
+
+        // 7. Exibir Resultado
+        const resultArea = document.getElementById("resultArea");
+        const urlDisplay = document.getElementById("urlDisplay");
+        const testLink = document.getElementById("testLink");
+
+        resultArea.style.display = "block";
+        urlDisplay.value = finalUrl;
+
+        // Configurar o botão de teste
+        testLink.href = finalUrl;
+        // Ajustar texto do link para o título original
+        testLink.textContent = `Importar "${
+          document.getElementById("title").value
+        }"`;
+      }
+
+      function copyToClipboard() {
+        const urlText = document.getElementById("urlDisplay").value;
+        navigator.clipboard
+          .writeText(urlText)
+          .then(() => {
+            alert("Link copiado para a área de transferência!");
+          })
+          .catch((err) => {
+            console.error("Erro ao copiar: ", err);
+          });
+      }
+    </script>
+  </body>
+</html>
